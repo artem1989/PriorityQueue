@@ -1,0 +1,9 @@
+#################
+## Eclipse
+#################
+
+
+**/target/**
+**/.settings/**
+**/.classpath
+**/.project
