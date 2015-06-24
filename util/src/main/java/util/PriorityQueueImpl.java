@@ -4,19 +4,17 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 
 	private static final int DEFAULT_CAPACITY = 10;
 	
-	private int capacity = 0;
-	private T[] queues;
-	private int maxLength;
+	private int capacity;
+	private T[] data;
 
 	public PriorityQueueImpl(int maxLength) {
 		if(maxLength <= 0) throw new IllegalArgumentException("Max lenght should be positive value");
-		this.maxLength = maxLength;
-		queues = (T[]) new Comparable[maxLength];
+		data = (T[]) new Comparable[maxLength];
+		capacity = 0;
 	}
 	
 	public PriorityQueueImpl() {
-		this.maxLength = DEFAULT_CAPACITY;
-		queues = (T[]) new Comparable[maxLength];
+		this(DEFAULT_CAPACITY);
 	}
 
 	@Override
@@ -26,29 +24,38 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 
 	@Override
 	public void insert(T element) {
-		if(element == null) throw new IllegalArgumentException("Null elements is not allowed");
-		if(capacity >= maxLength) {
+		if(element == null) throw new NullPointerException("Null elements is not allowed");
+		
+		if(capacity == data.length) {
 			resize();
 		}
-		queues[capacity] = element; 
-		capacity++;		
+		
+		data[capacity] = element;
+		int currentNode = capacity;
+		int parent = (currentNode - 1)/2;
+		while(currentNode > 0 && data[currentNode].compareTo(data[parent]) < 0) {
+			T temp = data[currentNode];
+			data[currentNode] = data[parent];
+			data[parent] = temp;
+			currentNode = parent;
+			parent = (currentNode - 1)/2;
+		}
+		capacity++;
 	}
 
 	private void resize() {
-		maxLength = 2 * maxLength;
-		T[] temp = (T[]) new Comparable[maxLength];
-		for(int i = 0 ; i < queues.length; i++) {
-			temp[i] = queues[i];
+		T[] temp = (T[]) new Comparable[2*data.length];
+		for(int i = 0 ; i < data.length; i++) {
+			temp[i] = data[i];
 		}
-		queues = temp;
+		data = temp;
 	}
 
 	
 
 	@Override
 	public T popMax() {
-		// TODO Auto-generated method stub
-		return null;
+		return data[capacity - 1];
 	}
 
 }

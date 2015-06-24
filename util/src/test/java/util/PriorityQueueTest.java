@@ -12,7 +12,7 @@ public class PriorityQueueTest {
 	
 	@Before
 	public void initQueue() {
-		priorityQueue = new PriorityQueueImpl<Integer>(3);
+		priorityQueue = new PriorityQueueImpl<Integer>();
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -41,13 +41,20 @@ public class PriorityQueueTest {
 		assertEquals(4, priorityQueue.size());
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void testInsertNull() {
 		priorityQueue.insert(null);
 	}
 	
 	@Test
 	public void testInsertNode() {
+		priorityQueue.insert(new Integer(10));
+		priorityQueue.insert(new Integer(8));
+		priorityQueue.insert(new Integer(17));
+		priorityQueue.insert(new Integer(13));
+		priorityQueue.insert(new Integer(14));
+		
+		assertEquals(Integer.valueOf(17), priorityQueue.popMax());
 		
 	}
 	

@@ -16,7 +16,7 @@ public interface PriorityQueue<T extends Comparable<T>> {
 	 * @throws NullPointerException
 	 *             when element is null.
 	 */
-	void insert(T element) throws IllegalArgumentException;
+	void insert(T element);
 
 	/**
 	 * Gets maximum element from heap,removes it from the heap.
