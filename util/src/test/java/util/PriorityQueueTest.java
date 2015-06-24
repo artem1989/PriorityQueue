@@ -12,19 +12,46 @@ public class PriorityQueueTest {
 	
 	@Before
 	public void initQueue() {
-		priorityQueue = new PriorityQueueImpl<Integer>();
+		priorityQueue = new PriorityQueueImpl<Integer>(3);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testIncorrectConstructorInput() {
+		priorityQueue = new PriorityQueueImpl<Integer>(-5);
+	}
+	
+	@Test
+	public void testSizeEmpty() {
+		assertEquals(0, priorityQueue.size());
 	}
 
 	@Test
-	public void testInsert() {
+	public void testInsertOneElement() {
 		priorityQueue.insert(new Integer(5));
 		assertEquals(1, priorityQueue.size());		
 	}
 	
+	@Test
+	public void testInsertMultipleElements() {
+		priorityQueue.insert(new Integer(1));
+		priorityQueue.insert(new Integer(5));
+		priorityQueue.insert(new Integer(7));
+		priorityQueue.insert(new Integer(8));
+		
+		assertEquals(4, priorityQueue.size());
+	}
+	
 	@Test(expected = IllegalArgumentException.class)
-	public void testInsertInvalid() {
+	public void testInsertNull() {
 		priorityQueue.insert(null);
 	}
+	
+	@Test
+	public void testInsertNode() {
+		
+	}
+	
+	
 
 
 }
