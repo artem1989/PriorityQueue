@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.NoSuchElementException;
+
 public class PriorityQueueTest {
 	
 	private PriorityQueue<Integer> priorityQueue;
@@ -45,6 +47,12 @@ public class PriorityQueueTest {
 	public void testInsertNull() {
 		priorityQueue.insert(null);
 	}
+
+	@Test(expected = NoSuchElementException.class)
+	public void testPopFromEmptyQueue() {
+		priorityQueue.popMax();
+	}
+
 	
 	@Test
 	public void testInsertNode() {
@@ -53,9 +61,22 @@ public class PriorityQueueTest {
 		priorityQueue.insert(new Integer(17));
 		priorityQueue.insert(new Integer(13));
 		priorityQueue.insert(new Integer(14));
-		
+
+		assertEquals(5, priorityQueue.size());
 		assertEquals(Integer.valueOf(17), priorityQueue.popMax());
-		
+	}
+
+	@Test
+	public void testPopMax() {
+		priorityQueue.insert(new Integer(11));
+		priorityQueue.insert(new Integer(15));
+		priorityQueue.insert(new Integer(10));
+		priorityQueue.insert(new Integer(8));
+		priorityQueue.insert(new Integer(33));
+
+		assertEquals(Integer.valueOf(33), priorityQueue.popMax());
+		assertEquals(Integer.valueOf(15), priorityQueue.popMax());
+		assertEquals(3, priorityQueue.size());
 	}
 	
 	

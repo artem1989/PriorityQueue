@@ -1,5 +1,7 @@
 package util;
 
+import java.util.NoSuchElementException;
+
 public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue<T>{
 
 	private static final int DEFAULT_CAPACITY = 10;
@@ -17,12 +19,10 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 		this(DEFAULT_CAPACITY);
 	}
 
-	@Override
 	public int size() {
 		return capacity;
 	}
 
-	@Override
 	public void insert(T element) {
 		if(element == null) throw new NullPointerException("Null elements is not allowed");
 		
@@ -33,7 +33,7 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 		data[capacity] = element;
 		int currentNode = capacity;
 		int parent = (currentNode - 1)/2;
-		while(currentNode > 0 && data[currentNode].compareTo(data[parent]) < 0) {
+		while(currentNode > 0 && data[currentNode].compareTo(data[parent]) > 0) {
 			T temp = data[currentNode];
 			data[currentNode] = data[parent];
 			data[parent] = temp;
@@ -44,18 +44,22 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 	}
 
 	private void resize() {
-		T[] temp = (T[]) new Comparable[2*data.length];
+		T[] temp = (T[]) new Comparable[2 * data.length];
 		for(int i = 0 ; i < data.length; i++) {
 			temp[i] = data[i];
 		}
 		data = temp;
 	}
 
-	
-
-	@Override
 	public T popMax() {
-		return data[capacity - 1];
+		if(capacity == 0) throw new NoSuchElementException("No elements to pop");
+		T max = data[0];
+		T[] temp = data;
+		for(int i = 1; i < data.length; i++) {
+			data[i - 1] = temp[i];
+		}
+		capacity--;
+		return max;
 	}
 
 }
