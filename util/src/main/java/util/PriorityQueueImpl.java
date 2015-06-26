@@ -10,7 +10,7 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 	private T[] data;
 
 	public PriorityQueueImpl(int maxLength) {
-		if(maxLength <= 0) throw new IllegalArgumentException("Max lenght should be positive value");
+		if(maxLength <= 0) throw new IllegalArgumentException("Max length should be positive value");
 		data = (T[]) new Comparable[maxLength];
 		capacity = 0;
 	}
@@ -31,16 +31,24 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 		}
 		
 		data[capacity] = element;
+		percolateUp();
+		capacity++;
+	}
+
+	private void percolateUp() {
 		int currentNode = capacity;
 		int parent = (currentNode - 1)/2;
 		while(currentNode > 0 && data[currentNode].compareTo(data[parent]) > 0) {
-			T temp = data[currentNode];
-			data[currentNode] = data[parent];
-			data[parent] = temp;
+			swap(currentNode, parent);
 			currentNode = parent;
 			parent = (currentNode - 1)/2;
 		}
-		capacity++;
+	}
+
+	private void swap(int currentNode, int nextNode) {
+		T temp = data[currentNode];
+		data[currentNode] = data[nextNode];
+		data[nextNode] = temp;
 	}
 
 	private void resize() {
@@ -52,14 +60,36 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 	}
 
 	public T popMax() {
-		if(capacity == 0) throw new NoSuchElementException("No elements to pop");
+		if(capacity < 1) throw new NoSuchElementException("No elements to pop");
 		T max = data[0];
-		T[] temp = data;
-		for(int i = 1; i < data.length; i++) {
-			data[i - 1] = temp[i];
-		}
+		putTailIntoRootAndRemove();
 		capacity--;
+		heapify(0);
 		return max;
+	}
+
+	private void putTailIntoRootAndRemove() {
+		data[0] = data[capacity - 1];
+		data[capacity - 1] = null;
+	}
+
+	private void heapify(int i) {
+		int largest = i;
+		int left = 2*i + 1;
+		int right = 2*i + 2;
+
+		if(left < capacity && data[left].compareTo(data[largest]) > 0) {
+			largest = left;
+		}
+
+		if(right < capacity && data[right].compareTo(data[largest]) > 0) {
+			largest = right;
+		}
+
+		if(largest != i) {
+			swap(i, largest);
+			heapify(largest);
+		}
 	}
 
 }

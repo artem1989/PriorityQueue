@@ -69,13 +69,18 @@ public class PriorityQueueTest {
 	@Test
 	public void testPopMax() {
 		priorityQueue.insert(new Integer(11));
-		priorityQueue.insert(new Integer(15));
 		priorityQueue.insert(new Integer(10));
-		priorityQueue.insert(new Integer(8));
+		priorityQueue.insert(new Integer(15));
+		priorityQueue.insert(new Integer(12));
 		priorityQueue.insert(new Integer(33));
+		priorityQueue.insert(new Integer(13));
+		priorityQueue.insert(new Integer(32));
 
 		assertEquals(Integer.valueOf(33), priorityQueue.popMax());
+		assertEquals(Integer.valueOf(32), priorityQueue.popMax());
 		assertEquals(Integer.valueOf(15), priorityQueue.popMax());
+		assertEquals(Integer.valueOf(13), priorityQueue.popMax());
+
 		assertEquals(3, priorityQueue.size());
 	}
 	

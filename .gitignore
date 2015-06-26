@@ -7,3 +7,13 @@
 **/.settings/**
 **/.classpath
 **/.project
+
+
+#################
+## InteliJ
+#################
+
+.idea/
+core/core.iml
+util/util.iml
+priority.queue.iml
