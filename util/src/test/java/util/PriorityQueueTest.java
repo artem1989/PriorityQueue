@@ -4,13 +4,19 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PriorityQueueTest {
-	
+
+	public static final int N_THREADS = 20;
 	private PriorityQueue<Integer> priorityQueue;
+	private Thread thread1;
+	private Thread thread2;
 	
 	@Before
 	public void initQueue() {
@@ -83,8 +89,6 @@ public class PriorityQueueTest {
 
 		assertEquals(3, priorityQueue.size());
 	}
-	
-	
 
 
 }

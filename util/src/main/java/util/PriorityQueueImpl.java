@@ -38,6 +38,7 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 	private void percolateUp() {
 		int currentNode = capacity;
 		int parent = (currentNode - 1)/2;
+
 		while(currentNode > 0 && data[currentNode].compareTo(data[parent]) > 0) {
 			swap(currentNode, parent);
 			currentNode = parent;
