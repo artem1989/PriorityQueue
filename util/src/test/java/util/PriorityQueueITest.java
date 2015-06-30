@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PriorityQueueITest {
 
-    private static final int N_THREADS = 20;
+    private static final int N_THREADS = 50;
     private PriorityQueue priorityQueue;
 
     @Before
@@ -27,7 +27,7 @@ public class PriorityQueueITest {
         executor.shutdown();
 
         while(!executor.isTerminated()) {}
-        assertEquals(20, priorityQueue.size());
+        assertEquals(50, priorityQueue.size());
     }
 
 }

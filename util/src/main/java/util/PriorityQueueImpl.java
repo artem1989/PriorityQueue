@@ -1,17 +1,26 @@
 package util;
 
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue<T>{
 
+	private final transient Logger logger = Logger.getLogger(PriorityQueue.class.getName());
+
 	private static final int DEFAULT_CAPACITY = 10;
+	public static final int LOCK_TIME = 100;
 	
-	private int capacity;
+	private volatile int capacity;
 	private T[] data;
+	private Lock lock;
 
 	public PriorityQueueImpl(int maxLength) {
 		if(maxLength <= 0) throw new IllegalArgumentException("Max length should be positive value");
 		data = (T[]) new Comparable[maxLength];
+		lock = new ReentrantLock();
 		capacity = 0;
 	}
 	
@@ -25,13 +34,20 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 
 	public void insert(T element) {
 		if(element == null) throw new NullPointerException("Null elements is not allowed");
-		
-		if(capacity == data.length) {
-			resize();
+		try {
+			if (lock.tryLock(LOCK_TIME, TimeUnit.SECONDS)) {
+				if(capacity == data.length) {
+                    resize();
+                }
+
+				data[capacity] = element;
+				percolateUp();
+			}
+		} catch (InterruptedException e) {
+			logger.info("Failed to insert new element. Can't catch reentrant lock");
+		} finally {
+			lock.unlock();
 		}
-		
-		data[capacity] = element;
-		percolateUp();
 		capacity++;
 	}
 
@@ -62,10 +78,19 @@ public class PriorityQueueImpl<T extends Comparable<T>> implements PriorityQueue
 
 	public T popMax() {
 		if(capacity < 1) throw new NoSuchElementException("No elements to pop");
-		T max = data[0];
-		putTailIntoRootAndRemove();
-		capacity--;
-		heapify(0);
+		T max = null;
+		try {
+			if (lock.tryLock(LOCK_TIME, TimeUnit.SECONDS)) {
+				max = data[0];
+				putTailIntoRootAndRemove();
+				capacity--;
+				heapify(0);
+			}
+		} catch (InterruptedException e) {
+			logger.info("Failed to insert new element. Can't catch reentrant lock");
+		} finally {
+			lock.unlock();
+		}
 		return max;
 	}
 
